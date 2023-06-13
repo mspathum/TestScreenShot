@@ -33,7 +33,9 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.common.util.concurrent.ListenableFuture;
@@ -64,6 +66,8 @@ public class MainActivity extends AppCompatActivity implements ImageAnalysis.Ana
 //      LinearLayout chartLinearLayout = findViewById(R.id.chart);
         Button screenShotButton = findViewById(R.id.Btn1);
         previewView = findViewById(R.id.previewView);
+        ImageView imgPreview = findViewById(R.id.imgPreview);
+
 
         if (isCameraPresentInPhone()) {
             Log.i("VIEDEO_RECORD_TAG", "Camera is detected");
@@ -75,8 +79,17 @@ public class MainActivity extends AppCompatActivity implements ImageAnalysis.Ana
         screenShotButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bitmap bitmap = previewView.getBitmap();
+                previewView.setVisibility(View.GONE);
+                imgPreview.setVisibility(View.VISIBLE);
+                imgPreview.setImageBitmap(bitmap);
+
                 Bitmap screenshot = captureScreenShot(chartLinearLayout);
                 storeImageAsJPEG(screenshot);
+
+                previewView.setVisibility(View.VISIBLE);
+                imgPreview.setVisibility(View.INVISIBLE);
+
             }
         });
 
@@ -92,6 +105,9 @@ public class MainActivity extends AppCompatActivity implements ImageAnalysis.Ana
         }, getExecutor());
 
     }
+
+
+
 
     //CameraX
     Executor getExecutor() {
